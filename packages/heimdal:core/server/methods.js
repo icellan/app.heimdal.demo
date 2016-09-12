@@ -5,12 +5,23 @@ Meteor.methods({
         return HeimdalKeys[this.connection.id];
     },
 
-    loginViaQR: function(secret, publicKey, signature, profile) {
+    loginViaQR: function(secret, publicKey, time, signature, profile) {
         // authenticate the user if the secret was sent with a correct signature from the users publicKey
         //if (secret === HeimdalKeys[this.connection.id]) {
+            // check the time, it should be within 30 seconds
+            var mTime = moment.unix(time);
+            if (!mTime.isValid()) {
+                throw new Meteor.Error(500, "Invalid time");
+            }
+            if (mTime.isAfter(moment())) {
+                throw new Meteor.Error(500, "Time is in the future");
+            }
+            if (mTime.add(30, 'seconds').isBefore(moment())) {
+                throw new Meteor.Error(500, "Token has expired");
+            }
             // check the signature from this user and validate the public key
             var encryption = new Heimdal.encryption();
-            if (encryption.verify(secret, signature, publicKey)) {
+            if (encryption.verify(secret + '&time=' + time, signature, publicKey)) {
                 // if everything is OK, check whether the user exists, and create if not
                 var userName = encryption.sha256(publicKey);
                 var user = Meteor.users.findOne({
