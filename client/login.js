@@ -27,6 +27,7 @@ Template.login.onRendered(function() {
             var site = Meteor.settings && Meteor.settings.heimdal && Meteor.settings.heimdal.site ? Meteor.settings.heimdal.site : window.location.host;
             var qrCode = "heimdal://" + site + "/" + challengeKey;
             Tracker.afterFlush(function() {
+                $('#qr').empty();
                 $('#qr').qrcode({
                     width: 250,
                     height: 250,
