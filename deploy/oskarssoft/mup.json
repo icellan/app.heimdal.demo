@@ -1,0 +1,23 @@
+{
+    "servers": [
+        {
+            "host": "188.40.97.5",
+            "username": "root",
+            "pem": "~/.ssh/id_rsa"
+        }
+    ],
+    "setupMongo": true,
+    "setupNode": true,
+    "nodeVersion": "0.10.41",
+    "setupPhantom": false,
+    "enableUploadProgressBar": true,
+    "appName": "heimdal-demo-anonymous",
+    "app": "../../",
+    "env": {
+        "PORT": 3064,
+        "ROOT_URL": "http://heimdal-demo-anonymous.oskarssoft.nl",
+        "MONGO_URL": "mongodb://localhost:27017/heimdal",
+        "MONGO_OPLOG_URL": "mongodb://localhost:27017/local"
+    },
+    "deployCheckWaitTime": 15
+}
