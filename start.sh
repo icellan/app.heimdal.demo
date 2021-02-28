@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-export MONGO_URL=mongodb://localhost:3062/meteor
-export MONGO_OPLOG_URL=mongodb://localhost:3062/local
+
+ADDRESS=`echo -n \`ifconfig en0 2>/dev/null|awk '/inet / {print $2}'\``
+
+export ROOT_URL=http://${ADDRESS}:3064
 meteor --port 3064
