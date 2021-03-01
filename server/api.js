@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import bodyParser from 'body-parser';
 
 import { handleLoginViaQR  } from './methods';
+import { Collections } from '../lib/collections';
 
 WebApp.connectHandlers.use('/api/v1/loginViaQr', bodyParser.json());
 WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, res, next) => {
@@ -13,9 +14,15 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
     res.end('');
   } else if (req.method === 'POST') {
     const { challenge, address, time, signature, profile } = req.body;
-    console.log(req.body);
     try {
+      const savedSecret = Collections.connectionSecrets.findOne({secret: challenge})
+      // we can only check here whether it actually exists
+      if (!savedSecret) {
+        throw new Meteor.Error('Invalid challenge key given');
+      }
+
       handleLoginViaQR(challenge, address, time, signature, profile);
+
       res.writeHead(200, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
@@ -30,7 +37,7 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
         'Access-Control-Allow-Headers': '*',
       });
       res.end(JSON.stringify({
-        error: e.message
+        error: e.error
       }));
     }
   }

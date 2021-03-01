@@ -1,5 +1,5 @@
 <head>
-    <title>Heimdal Demo - Anonymous</title>
+    <title>Heimdal Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,7 +18,15 @@
         <header>
             <div class="header-content">
                 <div class="header-content-inner">
-                    <h3>Welcome anonymous user</h3>
+                    {{#with getFieldValues}}
+                        <h3>Welcome<br/>
+                        {{#each this}}
+                            {{this}}<br/>
+                        {{/each}}
+                        </h3>
+                    {{else}}
+                        <h3>Welcome anonymous user</h3>
+                    {{/with}}
                     <h5>{{currentUser._id}}</h5>
                     <hr/>
                     <a class="logout btn btn-primary" href="#">Logout</a>

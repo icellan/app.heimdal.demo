@@ -2,7 +2,6 @@ import Message from 'bsv/message';
 import moment from 'moment';
 import { Collections } from '../lib/collections';
 
-const HeimdalKeys = {};
 export const handleLoginViaQR = function (secret, address, time, signature, profile) {
   // check the time, it should be within 30 seconds
   const mTime = moment.unix(time);
@@ -53,7 +52,10 @@ export const handleLoginViaQR = function (secret, address, time, signature, prof
       secret: secret,
       loginToken: stampedLoginToken,
     }, function (err) {
-      console.log('data inserted', err);
+      //console.log('data inserted', err);
+    });
+    Collections.connectionSecrets.remove({
+      secret,
     });
   } else {
     throw new Meteor.Error(404, 'Failed verifying signature');
@@ -62,13 +64,22 @@ export const handleLoginViaQR = function (secret, address, time, signature, prof
 
 Meteor.methods({
   getChallengeKey: function() {
-    HeimdalKeys[this.connection.id] = Random.secret(64);
-    return HeimdalKeys[this.connection.id];
+    const secret = Random.secret(64);
+    Collections.connectionSecrets.upsert({
+      _id: this.connection.id
+    },{
+      $set: {
+        _id: this.connection.id,
+        secret,
+      }
+    });
+    return secret;
   },
 
   loginViaQR: function(secret, publicKey, time, signature, profile) {
     // authenticate the user if the secret was sent with a correct signature from the users publicKey
-    if (secret === HeimdalKeys[this.connection.id]) {
+    const savedSecret = Collections.connectionSecrets.findOne({_id: this.connection.id})
+    if (savedSecret && secret === savedSecret.secret) {
       handleLoginViaQR(secret, publicKey, time, signature, profile);
     } else {
       throw new Meteor.Error(404, 'Incorrect secret used for logging in');
@@ -76,9 +87,9 @@ Meteor.methods({
   }
 });
 
-
 Meteor.publish('login-keys', function(secret) {
+  // TODO: this can be hardened by checking the connection id
   return Collections.loginKeys.find({
-    secret: secret
+    secret: secret,
   });
 });

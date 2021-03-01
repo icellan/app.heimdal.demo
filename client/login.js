@@ -29,7 +29,11 @@ Template.login.onRendered(function () {
     let challengeKey = getChallengeKey();
     if (challengeKey) {
       const site = Meteor.settings && Meteor.settings.heimdal && Meteor.settings.heimdal.site ? Meteor.settings.heimdal.site : window.location.host;
-      const qrCode = 'heimdal://' + site + '/' + challengeKey + '?type=api&api=/api/v1/loginViaQr';
+      let qrCode = 'heimdal://' + site + '/' + challengeKey + '?type=api&api=/api/v1/loginViaQr';
+      if (Meteor.settings.public && Meteor.settings.public.fields) {
+        qrCode += '&fields=' + Meteor.settings.public.fields.join(',');
+      }
+
       console.log(qrCode);
       template.qrCode.set(qrCode);
 
