@@ -20,7 +20,6 @@ ecmascript@0.15.0              # Enable ECMAScript2015+ syntax in app code
 flemay:less-autoprefixer
 fortawesome:fontawesome
 twbs:bootstrap@3.3.5
-dschulz:jquery-qrcode
 underscore
 session
 random

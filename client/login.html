@@ -5,9 +5,15 @@
                 <h1>Welcome to this Demo site</h1>
                 <hr>
                 <p>Please login with the Heimdal app to continue</p>
-                <a href="{{qrCode}}">
-                    <div class="qr-login">
-                        <div id="qr">
+                <a href="{{qrCode}}" class="qr-login-link">
+                    <div class="qr-login-container">
+                        <div class="qr-login">
+                            <div class="checksum">
+                                {{qrCodeChecksum}}<br/>
+                            </div>
+                            <div id="qr">
+                                <canvas id="qr-canvas"></canvas>
+                            </div>
                         </div>
                     </div>
                 </a>

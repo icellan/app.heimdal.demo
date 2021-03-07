@@ -2,7 +2,7 @@ import Message from 'bsv/message';
 import moment from 'moment';
 import { Collections } from '../lib/collections';
 
-export const handleLoginViaQR = function (secret, address, time, signature, profile) {
+export const handleLoginViaQR = function (serverUrl, secret, address, time, signature, fields) {
   // check the time, it should be within 30 seconds
   const mTime = moment.unix(time);
   if (!mTime.isValid()) {
@@ -16,7 +16,10 @@ export const handleLoginViaQR = function (secret, address, time, signature, prof
   }
 
   // check the signature from this user and validate the public key
-  const messageBuffer = Buffer.from(secret + '&time=' + time);
+  // server url includes the protocol, but not the trailing slash - https://demo.heimdal.app
+  const message = serverUrl + secret + '&time=' + time;
+  console.log(message);
+  const messageBuffer = Buffer.from(message);
   if (Message.verify(messageBuffer, address, signature)) {
     // if everything is OK, check whether the user exists, and create if not
     const userName = address;
@@ -41,7 +44,7 @@ export const handleLoginViaQR = function (secret, address, time, signature, prof
       _id: userId,
     }, {
       $set: {
-        profile: profile,
+        profile: fields,
       },
     });
 
@@ -58,7 +61,7 @@ export const handleLoginViaQR = function (secret, address, time, signature, prof
       secret,
     });
   } else {
-    throw new Meteor.Error(404, 'Failed verifying signature');
+    throw new Meteor.Error(401, 'Failed verifying signature');
   }
 };
 
@@ -76,13 +79,13 @@ Meteor.methods({
     return secret;
   },
 
-  loginViaQR: function(secret, publicKey, time, signature, profile) {
+  loginViaQR: function(secret, publicKey, time, signature, fields) {
     // authenticate the user if the secret was sent with a correct signature from the users publicKey
     const savedSecret = Collections.connectionSecrets.findOne({_id: this.connection.id})
     if (savedSecret && secret === savedSecret.secret) {
-      handleLoginViaQR(secret, publicKey, time, signature, profile);
+      handleLoginViaQR(secret, publicKey, time, signature, fields);
     } else {
-      throw new Meteor.Error(404, 'Incorrect secret used for logging in');
+      throw new Meteor.Error(401, 'Incorrect secret used for logging in');
     }
   }
 });
