@@ -19,15 +19,30 @@
             <div class="header-content">
                 <div class="header-content-inner">
                     {{#with getFieldValues}}
-                        <h3>Welcome<br/>
+                        <h3>Welcome</h3>
                         {{#each this}}
-                            {{this}}<br/>
+                            {{#if isImage}}
+                                <img src="{{value}}" style="width: 160px; "/>
+                            {{else}}
+                                {{key}}: {{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}
+                            {{/if}}
+                            <br/>
                         {{/each}}
-                        </h3>
                     {{else}}
                         <h3>Welcome anonymous user</h3>
                     {{/with}}
-                    <h5>{{currentUser._id}}</h5>
+                    <h5>UserId: {{currentUser._id}}</h5>
+                    {{#if addDataAfterLogin}}
+                        <h3>Add profile data test</h3>
+                        <div class="add-profile-qr">
+                            {{#each addDataAfterLogin}}
+                                <div class="add-profile-col">
+                                    {{key}}<br/>
+                                    {{> valueQrCode attribute=key value=value}}
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/if}}
                     <hr/>
                     <a class="logout btn btn-primary" href="#">Logout</a>
                 </div>
@@ -36,4 +51,15 @@
     {{else}}
         {{> login}}
     {{/if}}
+</template>
+
+<template name="valueQrCode">
+    <div class="qr-data">
+        <div class="checksum">
+            {{qrCodeChecksum}}<br/>
+        </div>
+        <div id="qr">
+            <canvas id="qr-canvas"></canvas>
+        </div>
+    </div>
 </template>

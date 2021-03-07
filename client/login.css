@@ -9,12 +9,6 @@
     border-radius: 8px;
 }
 
-.qr-login-container .qr-login .checksum {
-    color: #000;
-    font-size: 22px;
-    padding-bottom: 12px;
-}
-
 a.qr-login-link:hover {
     text-decoration: none;
 }
@@ -24,3 +18,25 @@ canvas#qr-canvas {
     height: 200px !important;
 }
 
+.checksum {
+    color: #000;
+    font-size: 22px;
+    padding-bottom: 12px;
+}
+
+.qr-data {
+    background-color: white;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.add-profile-qr {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.add-profile-col {
+    display: inline-block;
+    margin: 25px;
+}

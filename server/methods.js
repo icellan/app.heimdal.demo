@@ -1,3 +1,4 @@
+import bsv from 'bsv';
 import Message from 'bsv/message';
 import moment from 'moment';
 import { Collections } from '../lib/collections';
@@ -18,7 +19,6 @@ export const handleLoginViaQR = function (serverUrl, secret, address, time, sign
   // check the signature from this user and validate the public key
   // server url includes the protocol, but not the trailing slash - https://demo.heimdal.app
   const message = serverUrl + secret + '&time=' + time;
-  console.log(message);
   const messageBuffer = Buffer.from(message);
   if (Message.verify(messageBuffer, address, signature)) {
     // if everything is OK, check whether the user exists, and create if not
@@ -66,14 +66,23 @@ export const handleLoginViaQR = function (serverUrl, secret, address, time, sign
 };
 
 Meteor.methods({
-  getChallengeKey: function() {
+  getChallengeKey: function(data) {
     const secret = Random.secret(64);
+
+    if (Meteor.settings?.public?.siteKey) {
+      const privateKey = bsv.PrivateKey.fromWIF(Meteor.settings.public.siteKey);
+      data.sig = Message(Buffer.from(secret)).sign(privateKey);
+      data.id = Meteor.settings.public.siteAddress;
+    }
+
     Collections.connectionSecrets.upsert({
-      _id: this.connection.id
+      _id: this.connection.id,
     },{
       $set: {
         _id: this.connection.id,
+        date: new Date(),
         secret,
+        data,
       }
     });
     return secret;
