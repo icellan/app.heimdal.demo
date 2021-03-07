@@ -1,5 +1,5 @@
 import bsv from 'bsv';
-import Message from 'bsv/Message';
+import Message from 'bsv/message';
 import { Template } from 'meteor/templating';
 import QRCode from 'qrcode';
 import { getChallengeKey, Collections } from '../lib/collections';
