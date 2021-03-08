@@ -40,3 +40,26 @@ canvas#qr-canvas {
     display: inline-block;
     margin: 25px;
 }
+
+.avatar {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.profile-data-table {
+    width: auto;
+    display: inline-table;
+    margin-bottom: 0;
+}
+.profile-data-table tr td {
+    padding: 2px 4px;
+}
+.profile-data-table tr td.left {
+    text-align: left;
+}
+.profile-data-table tr td.right {
+    text-align: right;
+    font-weight: 700;
+}

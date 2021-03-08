@@ -20,20 +20,28 @@
                 <div class="header-content-inner">
                     {{#with getFieldValues}}
                         <h3>Welcome</h3>
+                        <table class="table profile-data-table">
                         {{#each this}}
+                            <tr>
                             {{#if isImage}}
-                                <img src="{{value}}" style="width: 160px; "/>
+                                <td colspan="2"><img src="{{value}}" class="avatar" /></td>
                             {{else}}
-                                {{key}}: {{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}
+                                <td class="right">{{key}}</td>
+                                <td class="left">{{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}</td>
                             {{/if}}
-                            <br/>
+                            </tr>
                         {{/each}}
+                            <tr>
+                                <td class="right">UserId</td>
+                                <td class="left">{{currentUser._id}}</td>
+                            </tr>
+                        </table>
                     {{else}}
                         <h3>Welcome anonymous user</h3>
                     {{/with}}
-                    <h5>UserId: {{currentUser._id}}</h5>
                     {{#if addDataAfterLogin}}
                         <h3>Add profile data test</h3>
+                        <h5>Scan the QR codes to add this data to your identity</h5>
                         <div class="add-profile-qr">
                             {{#each addDataAfterLogin}}
                                 <div class="add-profile-col">
