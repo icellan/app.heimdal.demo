@@ -1,8 +1,6 @@
-import bsv from 'bsv';
-import Message from 'bsv/message';
 import {Template} from 'meteor/templating';
 import QRCode from 'qrcode';
-import { getQrCodeChecksum } from './login';
+import { HeimdalId } from 'heimdal-id';
 
 import './main.html';
 
@@ -56,18 +54,22 @@ Template.main.events({
 Template.valueQrCode.onCreated(function() {
     const template = this;
     const site = Meteor.settings && Meteor.settings.heimdal && Meteor.settings.heimdal.site ? Meteor.settings.heimdal.site : window.location.host;
-    template.qrCode = `heimdal://${site}/?t=add&f=${encodeURIComponent(template.data.attribute)}&v=${template.data.value}`;
+
+    const heimdal = new HeimdalId(Meteor.settings?.public?.siteKey);
+    heimdal.newRequest(site);
+    heimdal.addFieldValue(template.data.attribute, template.data.value);
     if (Meteor.settings?.public?.siteKey) {
-        const privateKey = bsv.PrivateKey.fromWIF(Meteor.settings.public.siteKey);
-        const signature = Message(Buffer.from(`${template.data.attribute}:${template.data.value}`)).sign(privateKey);
-        template.qrCode += `&sig=${signature}&id=${Meteor.settings.public.siteAddress}`;
+        template.qrCode = heimdal.getSignedRequest();
+    } else {
+        template.qrCode = heimdal.getRequest();
     }
 
-    template.qrChecksum = new ReactiveVar(getQrCodeChecksum(template.qrCode));
+    console.log(heimdal);
+    console.log(template.qrCode);
+    template.qrChecksum = new ReactiveVar(heimdal.getChecksum(template.qrCode));
 
     this.autorun(() => {
         Tracker.afterFlush(function () {
-            console.log(this.qrCode);
             QRCode.toCanvas(template.$('#qr-canvas')[0], template.qrCode,  {
                 scale: 8,
                 width: 200,
