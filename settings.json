@@ -1,0 +1,16 @@
+{
+  "public": {
+    "siteKey": "5JXgKbCBV9sarnZ2iVGAECTeaXDopVKVHRrphJ87tKD7pcZECHr",
+    "siteAddress": "1HiYg2CCSVM2zC2z9cvnVTLY3norrnQh1f",
+    "siteName": "Heimdal Demo - Level 1",
+    "fields": [
+      "avatar",
+      "name",
+      "email"
+    ],
+    "fetchData": true,
+    "addDataAfterLogin": {
+      "#employeeId": "DEMO-NL1234242B031"
+    }
+  }
+}
