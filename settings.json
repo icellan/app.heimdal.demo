@@ -6,7 +6,8 @@
     "fields": [
       "avatar",
       "name",
-      "email"
+      "email",
+      "#employeeId"
     ],
     "fetchData": true,
     "addDataAfterLogin": {
