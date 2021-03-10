@@ -8,7 +8,7 @@
     "@babel/runtime": "^7.13.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
-    "heimdal-id": "^1.0.0",
+    "heimdal-id": "^1.2.0",
     "meteor-node-stubs": "^1.0.1",
     "moment": "^2.29.1",
     "qrcode": "^1.4.4"

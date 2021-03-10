@@ -27,7 +27,7 @@ Template.login.onCreated(function () {
     const qrCode = Session.get('loginQr');
     if (qrCode) {
       const heimdal = new HeimdalId();
-      heimdal.fromUrl(qrCode);
+      heimdal.requestFromUrl(qrCode);
 
       this.subscribe('login-keys', heimdal.getChallenge());
     }
@@ -37,7 +37,7 @@ Template.login.onCreated(function () {
     const qrCode = Session.get('loginQr');
     if (qrCode) {
       const heimdal = new HeimdalId();
-      heimdal.fromUrl(qrCode);
+      heimdal.requestFromUrl(qrCode);
 
       const loginKey = Collections.loginKeys.findOne({
         secret: heimdal.getChallenge(),
@@ -59,7 +59,7 @@ Template.login.onRendered(function () {
     const qrCode = Session.get('loginQr');
     if (qrCode) {
       const heimdal = new HeimdalId();
-      heimdal.fromUrl(qrCode);
+      heimdal.requestFromUrl(qrCode);
 
       console.log(qrCode);
       template.qrCode.set(qrCode);
