@@ -30,13 +30,13 @@ canvas#qr-canvas {
     border-radius: 8px;
 }
 
-.add-profile-qr {
+.add-qr {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.add-profile-col {
+.add-col {
     display: inline-block;
     margin: 25px;
 }

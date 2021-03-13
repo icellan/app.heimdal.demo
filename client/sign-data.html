@@ -1,0 +1,14 @@
+<template name="signData">
+    {{#with hasSignData}}
+        <hr/>
+        <h3>Sign data test</h3>
+        <h5>Scan the QR codes to test signing data</h5>
+        <div class="add-qr">
+            {{#each this}}
+                <div class="add-col">
+                    {{> dataQrCode signData=this dataIndex=@index}}
+                </div>
+            {{/each}}
+        </div>
+    {{/with}}
+</template>

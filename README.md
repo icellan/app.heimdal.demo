@@ -1,6 +1,9 @@
 # Heimdal demo sites
+> [Heimdal](https://en.wikipedia.org/wiki/Heimdallr) is a god who keeps watch for invaders and the onset of Ragnarök from his dwelling Himinbjörg, where the burning rainbow bridge Bifröst meets the sky.
 
 This is the repository for the demo websites for the Heimdal login protocol.
+
+> Check out the Heimdal Javascript library at https://github.com/icellan/heimdal-id.
 
 Usage:
 

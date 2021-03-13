@@ -2,6 +2,21 @@ import { Collections } from '../lib/collections';
 import { HeimdalId } from 'heimdal-id';
 import { Meteor } from 'meteor/meteor';
 
+export const handleSignedData = function (serverUrl, responseBody) {
+  const heimdal = new HeimdalId();
+  const heimdalResponse = heimdal.newResponse(serverUrl, responseBody);
+  if (heimdalResponse.isValid()) {
+    Collections.signedData.insert({
+      secret: heimdalResponse.getChallenge(),
+      signedData: responseBody.signed
+    }, function (err) {
+      //console.log('data inserted', err);
+    });
+  } else {
+    throw new Meteor.Error(401, 'Failed verifying signature');
+  }
+}
+
 export const handleLoginViaQR = function (serverUrl, responseBody) {
   const heimdal = new HeimdalId();
   const heimdalResponse = heimdal.newResponse(serverUrl, responseBody);
@@ -53,6 +68,34 @@ export const handleLoginViaQR = function (serverUrl, responseBody) {
 };
 
 Meteor.methods({
+  getDataQr: function (settingsIndex) {
+    const privateKey = Meteor.settings?.public?.siteKey;
+    const heimdal = new HeimdalId(privateKey);
+    const site = Meteor.absoluteUrl().replace(/^https?:\/\//, '').replace(/\//g, '');
+    heimdal.newRequest(site);
+    heimdal.setType('fetch');
+    heimdal.setAction('/api/v1/dataForQrLogin');
+
+    const data = {
+      t: 'sign',
+      a: '/api/v1/signedData',
+      sign: Meteor.settings.public.signData[settingsIndex],
+    }
+
+    const _id = `${this.connection.id}-data-${settingsIndex}`;
+    Collections.connectionSecrets.upsert({
+      _id,
+    }, {
+      $set: {
+        _id,
+        date: new Date(),
+        secret: heimdal.getChallenge(),
+        data,
+      },
+    });
+
+    return privateKey ? heimdal.getSignedRequest() : heimdal.getRequest();
+  },
   getLoginQr: function () {
     const privateKey = Meteor.settings?.public?.siteKey;
     const heimdal = new HeimdalId(privateKey);
@@ -95,6 +138,12 @@ Meteor.methods({
 
 Meteor.publish('login-keys', function (secret) {
   return Collections.loginKeys.find({
+    secret: secret,
+  });
+});
+
+Meteor.publish('signed-data', function (secret) {
+  return Collections.signedData.find({
     secret: secret,
   });
 });

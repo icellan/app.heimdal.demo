@@ -42,15 +42,16 @@
                     {{#if addDataAfterLogin}}
                         <h3>Add profile data test</h3>
                         <h5>Scan the QR codes to add this data to your identity</h5>
-                        <div class="add-profile-qr">
+                        <div class="add-qr">
                             {{#each addDataAfterLogin}}
-                                <div class="add-profile-col">
+                                <div class="add-col">
                                     {{key}}<br/>
                                     {{> valueQrCode attribute=key value=value}}
                                 </div>
                             {{/each}}
                         </div>
                     {{/if}}
+                    {{> signData }}
                     <hr/>
                     <a class="logout btn btn-primary" href="#">Logout</a>
                 </div>

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import bodyParser from 'body-parser';
 
-import { handleLoginViaQR  } from './methods';
+import { handleLoginViaQR, handleSignedData } from './methods';
 import { Collections } from '../lib/collections';
 
 WebApp.connectHandlers.use('/api/v1/loginViaQr', bodyParser.json({
@@ -10,7 +10,7 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', bodyParser.json({
   parameterLimit: 15*1024,
 }));
 
-WebApp.connectHandlers.use('/api/v1/dataForQrLogin', bodyParser.json());
+WebApp.connectHandlers.use('/', bodyParser.json());
 
 WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, res, next) => {
   // Heimdal only support https:// urls - this is just for the local demo sites
@@ -23,8 +23,8 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
     });
     res.end('');
   } else if (req.method === 'POST') {
-    const { challenge } = req.body;
     try {
+      const { challenge } = req.body;
       const savedSecret = Collections.connectionSecrets.findOne({secret: challenge})
       // we can only check here whether it actually exists
       if (!savedSecret) {
@@ -47,7 +47,7 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
         'Access-Control-Allow-Headers': '*',
       });
       res.end(JSON.stringify({
-        error: e.error
+        error: e.message
       }));
     }
   }
@@ -55,8 +55,6 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
 
 WebApp.connectHandlers.use('/api/v1/dataForQrLogin', Meteor.bindEnvironment((req, res, next) => {
   // Heimdal only support https:// urls - this is just for the local demo sites
-  const serverUrl = Meteor.absoluteUrl().replace('http://', 'https://');
-
   if (req.method === 'OPTIONS') {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
@@ -64,8 +62,8 @@ WebApp.connectHandlers.use('/api/v1/dataForQrLogin', Meteor.bindEnvironment((req
     });
     res.end('');
   } else if (req.method === 'POST') {
-    const { challenge } = req.body;
     try {
+      const { challenge } = req.body;
       const savedSecret = Collections.connectionSecrets.findOne({secret: challenge})
       // we can only check here whether it actually exists
       if (!savedSecret || !savedSecret.data) {
@@ -88,7 +86,51 @@ WebApp.connectHandlers.use('/api/v1/dataForQrLogin', Meteor.bindEnvironment((req
         'Access-Control-Allow-Headers': '*',
       });
       res.end(JSON.stringify({
-        error: e.error
+        error: e.message
+      }));
+    }
+  }
+}));
+
+WebApp.connectHandlers.use('/api/v1/signedData', Meteor.bindEnvironment((req, res, next) => {
+  // Heimdal only support https:// urls - this is just for the local demo sites
+  const serverUrl = Meteor.absoluteUrl().replace('http://', 'https://');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(200, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    });
+    res.end('');
+  } else if (req.method === 'POST') {
+    try {
+      console.log(req.body);
+      const { challenge } = req.body;
+      const savedSecret = Collections.connectionSecrets.findOne({secret: challenge})
+      // we can only check here whether it actually exists
+      if (!savedSecret || !savedSecret.data) {
+        throw new Meteor.Error('Invalid challenge key given');
+      }
+
+      handleSignedData(serverUrl, req.body);
+
+      res.writeHead(200, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Content-Type': 'application/json',
+      });
+      res.end(JSON.stringify({
+        message: 'OK',
+        data: savedSecret.data,
+      }));
+    } catch(e) {
+      console.log(e);
+      res.writeHead(500, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
+      });
+      res.end(JSON.stringify({
+        error: e.message
       }));
     }
   }

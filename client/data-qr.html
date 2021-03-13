@@ -1,0 +1,30 @@
+<template name="dataQrCode">
+    <div class="qr-data">
+        <div class="checksum">
+            {{qrCodeChecksum}}<br/>
+        </div>
+        {{#with getSignedData}}
+            <div class="signed-data">
+                {{#if signedData.message}}
+                    <b>Message</b><br/>
+                    {{signedData.message}}<br/>
+                    <b>Address</b><br/>
+                    {{signedData.address}}<br/>
+                    <b>Signature</b><br/>
+                    {{signedData.signature}}<br/>
+                {{else}}
+                    {{#if signedData.op_return}}
+                        <b>{{signedData.algorithm}}</b><br/>
+                        {{{parseOpReturn signedData.op_return}}}
+                    {{else}}
+                        <i>Unknown signed message type</i>
+                    {{/if}}
+                {{/if}}
+            </div>
+        {{else}}
+            <div id="qr">
+                <canvas id="qr-canvas"></canvas>
+            </div>
+        {{/with}}
+    </div>
+</template>
