@@ -5,6 +5,8 @@ This is the repository for the demo websites for the Heimdal login protocol.
 
 > Check out the Heimdal Javascript library at https://github.com/icellan/heimdal-id.
 
+**NOTE: This site is only for demonstration purposes for the Heimdal protocol. The PII of the user logging in, should be handled and stored in a safer way in a production application.**
+
 Usage:
 
 ```shell

@@ -1,6 +1,7 @@
-import { Collections } from '../lib/collections';
-import { HeimdalId } from 'heimdal-id';
 import { Meteor } from 'meteor/meteor';
+import fetch from 'node-fetch';
+import { HeimdalId } from 'heimdal-id';
+import { Collections } from '../lib/collections';
 
 export const handleSignedData = function (serverUrl, responseBody) {
   const heimdal = new HeimdalId();
@@ -40,11 +41,16 @@ export const handleLoginViaQR = function (serverUrl, responseBody) {
       userId = user._id;
     }
 
+    const profile = heimdalResponse.getFields();
+    if (heimdalResponse.bap) {
+      profile.bap = heimdalResponse.bap;
+    }
+
     Meteor.users.update({
       _id: userId,
     }, {
       $set: {
-        profile: heimdalResponse.getFields(),
+        profile,
       },
     });
 
@@ -134,6 +140,28 @@ Meteor.methods({
 
     return privateKey ? heimdal.getSignedRequest() : heimdal.getRequest();
   },
+  isAttestationValid: async function(address, attribute, value, nonce) {
+    if (Meteor.settings?.bap?.apiUrl) {
+      // TODO: Move to BAP class
+      const url = `${Meteor.settings.bap.apiUrl}/attestation/valid`;
+      const rawResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address,
+          attribute,
+          value,
+          nonce,
+        }),
+      });
+
+      return rawResponse.json();
+    }
+
+    return false;
+  }
 });
 
 Meteor.publish('login-keys', function (secret) {

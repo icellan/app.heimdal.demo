@@ -18,27 +18,53 @@
         <header>
             <div class="header-content">
                 <div class="header-content-inner">
-                    {{#with getFieldValues}}
-                        <h3>Welcome</h3>
-                        <table class="table profile-data-table">
-                        {{#each this}}
-                            <tr>
-                            {{#if isImage}}
-                                <td colspan="2"><img src="{{value}}" class="avatar" /></td>
-                            {{else}}
-                                <td class="right">{{key}}</td>
-                                <td class="left">{{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}</td>
-                            {{/if}}
-                            </tr>
-                        {{/each}}
-                            <tr>
-                                <td class="right">UserId</td>
-                                <td class="left">{{currentUser._id}}</td>
-                            </tr>
-                        </table>
-                    {{else}}
-                        <h3>Welcome anonymous user</h3>
+                    <div>
+                        {{#with getFieldValues}}
+                            <h3>Welcome</h3>
+                            <table class="table profile-data-table">
+                            {{#each this}}
+                                <tr>
+                                {{#if isImage}}
+                                    <td colspan="2"><img src="{{value}}" class="avatar" /></td>
+                                {{else}}
+                                    <td class="right">{{key}}</td>
+                                    <td class="left">{{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}</td>
+                                {{/if}}
+                                </tr>
+                            {{/each}}
+                                <tr>
+                                    <td class="right">UserId</td>
+                                    <td class="left">{{currentUser._id}}</td>
+                                </tr>
+                            </table>
+                        {{else}}
+                            <h3>Welcome anonymous user</h3>
+                        {{/with}}
+                    </div>
+
+                    {{#with getBAPFieldValues}}
+                        <hr/>
+                        <h3>Verifiable fields</h3>
+                        <div>
+                            <table class="table profile-data-table">
+                            {{#each this}}
+                                <tr>
+                                {{#if isImage}}
+                                    <td colspan="2"><img src="{{value}}" class="avatar" /></td>
+                                {{else}}
+                                    <td class="right">{{key}}</td>
+                                    <td class="left">
+                                        {{#if value}}{{value}}{{else}}<i>&lt;empty&gt;</i>{{/if}}<br/>
+                                        {{nonce}}<br/>
+                                        {{isAttestationValid}}
+                                    </td>
+                                {{/if}}
+                                </tr>
+                            {{/each}}
+                            </table>
+                        </div>
                     {{/with}}
+
                     {{#if addDataAfterLogin}}
                         <h3>Add profile data test</h3>
                         <h5>Scan the QR codes to add this data to your identity</h5>

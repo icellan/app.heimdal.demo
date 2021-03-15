@@ -1,4 +1,7 @@
 {
+  "bap": {
+    "apiUrl": "https://bap-api.com/v1"
+  },
   "public": {
     "siteKey": "5JXgKbCBV9sarnZ2iVGAECTeaXDopVKVHRrphJ87tKD7pcZECHr",
     "siteAddress": "1HiYg2CCSVM2zC2z9cvnVTLY3norrnQh1f",
@@ -7,11 +10,31 @@
       "avatar",
       "name",
       "email",
-      "#employeeId"
+      "#employeeId*",
+      "bap[name;email]"
     ],
     "fetchData": true,
     "addDataAfterLogin": {
       "#employeeId": "DEMO-NL1234242B031"
-    }
+    },
+    "signData": [
+      {
+        "op_return": {
+          "data": [
+            "31394878696756345179427633744870515663554551797131707a5a56646f417574",
+            "48656C6C6F20776F726C6421",
+            "746578742f6d61726b646f776e",
+            "5554462d38"
+          ],
+          "algorithm": "AIP",
+          "AIP": {
+            "indexes": ""
+          }
+        }
+      },
+      {
+        "message": "Hello World!"
+      }
+    ]
   }
 }

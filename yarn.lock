@@ -614,10 +614,10 @@ hash.js@^1.0.0, hash.js@^1.0.3, hash.js@^1.1.7:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-heimdal-id@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/heimdal-id/-/heimdal-id-1.3.0.tgz#54615fb666bd87683bb24b0f3064fccffb7d7ced"
-  integrity sha512-uLyNV9/+q4ZzQ80cORksDh84Zxxkw3HYT9s8OPZl1fzXdbmh0mwB0uKbOZKj/pO9D/h1HZKSnt27HMqTh8OXRQ==
+heimdal-id@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/heimdal-id/-/heimdal-id-1.3.1.tgz#9230d32f1d0d203d28a4dc65aedbcb50ac4dfa4e"
+  integrity sha512-YUNVJf8FTfe5vlPR6G1Gqcn64fPg1IvFHxoMKac2A5A/1Or1vc9DW3hrR4chAQ2CH4H47WSa+AEaos9qNbZg5Q==
   dependencies:
     base64url "^3.0.1"
     bsv "^1.5.4"
