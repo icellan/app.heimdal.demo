@@ -41,6 +41,14 @@ canvas#qr-canvas {
     margin: 25px;
 }
 
+@media(max-width: 589px) {
+    .add-qr {
+        display: block;
+        flex-direction: column;
+        margin: 25px;
+    }
+}
+
 .avatar {
     width: 120px;
     height: 160px;
@@ -50,6 +58,7 @@ canvas#qr-canvas {
 
 .profile-data-table {
     width: auto;
+    max-width: 100%;
     display: inline-table;
     margin-bottom: 0;
 }
@@ -58,6 +67,7 @@ canvas#qr-canvas {
 }
 .profile-data-table tr td.left {
     text-align: left;
+    word-break: break-all;
 }
 .profile-data-table tr td.right {
     text-align: right;
