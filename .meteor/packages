@@ -20,9 +20,9 @@ ecmascript@0.15.0              # Enable ECMAScript2015+ syntax in app code
 flemay:less-autoprefixer
 fortawesome:fontawesome
 twbs:bootstrap@3.3.5
-underscore
-session
-random
-accounts-base
-accounts-password
+underscore@1.0.10
+session@1.2.0
+random@1.2.0
+accounts-base@1.8.0
+accounts-password@1.7.0
 simple:reactive-method
