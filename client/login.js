@@ -85,7 +85,9 @@ Template.login.onRendered(function () {
 
 Template.login.helpers({
   qrCode() {
-    return Template.instance().qrCode.get();
+    // this prefix can be used to do local testing - like in Expo
+    const testingPrefix = Meteor.settings.public.qrClickPrefix || '';
+    return testingPrefix + Template.instance().qrCode.get();
   },
   qrCodeChecksum() {
     return Template.instance().qrCodeChecksum.get();

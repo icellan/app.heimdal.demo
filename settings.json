@@ -3,6 +3,7 @@
     "apiUrl": "https://bap-api.com/v1"
   },
   "public": {
+    "_qrClickPrefix": "exp://192.168.1.1:19000/--/",
     "siteKey": "5JXgKbCBV9sarnZ2iVGAECTeaXDopVKVHRrphJ87tKD7pcZECHr",
     "siteAddress": "1HiYg2CCSVM2zC2z9cvnVTLY3norrnQh1f",
     "siteName": "Heimdal Demo - Level 1",
