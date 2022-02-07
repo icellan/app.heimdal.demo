@@ -78,7 +78,7 @@ Meteor.methods({
   getDataQr: function (settingsIndex) {
     const privateKey = Meteor.settings?.public?.siteKey;
     const heimdal = new HeimdalId(privateKey);
-    const site = Meteor.absoluteUrl().replace(/^https?:\/\//, '').replace(/\//g, '');
+    const site = (process.env.ROOT_URL || Meteor.absoluteUrl()).replace(/^https?:\/\//, '').replace(/\//g, '');
     heimdal.newRequest(site);
     heimdal.setType('fetch');
     heimdal.setAction('/api/v1/dataForQrLogin');
@@ -106,7 +106,8 @@ Meteor.methods({
   getLoginQr: function () {
     const privateKey = Meteor.settings?.public?.siteKey;
     const heimdal = new HeimdalId(privateKey);
-    const site = Meteor.absoluteUrl().replace(/^https?:\/\//, '').replace(/\//g, '');
+    const site = (process.env.ROOT_URL || Meteor.absoluteUrl()).replace(/^https?:\/\//, '').replace(/\//g, '');
+    console.log(process.env.ROOT_URL, site);
     heimdal.newRequest(site);
     heimdal.setAction('/api/v1/loginViaQr');
 
