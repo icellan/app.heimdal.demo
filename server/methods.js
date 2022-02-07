@@ -32,7 +32,6 @@ export const handleLoginViaQR = function (serverUrl, responseBody) {
       // create user
       userId = Accounts.createUser({
         username: userName,
-        password: Random.secret(32),
       });
       user = Meteor.users.findOne({
         _id: userId,
@@ -43,6 +42,8 @@ export const handleLoginViaQR = function (serverUrl, responseBody) {
 
     const profile = heimdalResponse.getFields();
     if (heimdalResponse.bap) {
+      // just add the BAP fields to the profile in this test
+      // in a production app, this should be processed further
       profile.bap = heimdalResponse.bap;
     }
 
@@ -162,16 +163,4 @@ Meteor.methods({
 
     return false;
   }
-});
-
-Meteor.publish('login-keys', function (secret) {
-  return Collections.loginKeys.find({
-    secret: secret,
-  });
-});
-
-Meteor.publish('signed-data', function (secret) {
-  return Collections.signedData.find({
-    secret: secret,
-  });
 });

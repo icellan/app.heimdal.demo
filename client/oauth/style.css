@@ -1,0 +1,27 @@
+.hidden {
+    display: none;
+}
+
+.oauth-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #fff;
+    text-align: center;
+}
+
+.oauth-login button {
+    background-color: #fff;
+    color: #333;
+    padding: 12px 25px;
+    border-radius: 12px;
+}
+
+.oauth-login button.logout {
+    background-color: transparent;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 12px;
+}

@@ -96,27 +96,28 @@ Template.main.events({
 });
 
 Template.valueQrCode.onCreated(function() {
+    this.qrCode = new ReactiveVar();
     const template = this;
-    const site = Meteor.settings && Meteor.settings.heimdal && Meteor.settings.heimdal.site ? Meteor.settings.heimdal.site : window.location.host;
 
+    const site = Meteor.settings && Meteor.settings.heimdal && Meteor.settings.heimdal.site ? Meteor.settings.heimdal.site : window.location.host;
     const heimdal = new HeimdalId(Meteor.settings?.public?.siteKey);
 
     heimdal.newRequest(site);
     heimdal.addFieldValue(template.data.attribute, template.data.value);
     if (Meteor.settings?.public?.siteKey) {
-        template.qrCode = heimdal.getSignedRequest();
+        template.qrCode.set(heimdal.getSignedRequest());
     } else {
-        template.qrCode = heimdal.getRequest();
+        template.qrCode.set(heimdal.getRequest());
     }
 
     console.log(JSON.stringify(heimdal));
     console.log(heimdal.getSigningMessage());
-    template.qrChecksum = new ReactiveVar(heimdal.getChecksum(template.qrCode));
+    template.qrChecksum = new ReactiveVar(heimdal.getChecksum(template.qrCode.get()));
 
     this.autorun(() => {
         Tracker.afterFlush(function () {
-            console.log('QR', template.qrCode)
-            QRCode.toCanvas(template.$('#qr-canvas')[0], template.qrCode,  {
+            console.log('QR', template.qrCode.get())
+            QRCode.toCanvas(template.$('#qr-canvas')[0], template.qrCode.get(),  {
                 scale: 8,
                 width: 200,
                 margin: 2,
@@ -133,6 +134,10 @@ Template.valueQrCode.onCreated(function() {
 });
 
 Template.valueQrCode.helpers({
+    qrCode() {
+        const testingPrefix = Meteor.settings.public.qrClickPrefix || '';
+        return testingPrefix + Template.instance().qrCode.get();
+    },
     qrCodeChecksum() {
         return Template.instance().qrChecksum.get();
     }

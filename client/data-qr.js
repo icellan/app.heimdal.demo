@@ -3,8 +3,9 @@ import { HeimdalId } from 'heimdal-id';
 import QRCode from 'qrcode';
 import { Collections } from '../lib/collections';
 
-Template.dataQrCode.onCreated(function() {
+Template.dataQrCode.onCreated(function () {
   const template = this;
+  this.qrCode = new ReactiveVar();
   this.qrChecksum = new ReactiveVar();
   this.challenge = new ReactiveVar();
   this.signedData = new ReactiveVar();
@@ -17,18 +18,19 @@ Template.dataQrCode.onCreated(function() {
     template.challenge.set(heimdal.getChallenge());
 
     Tracker.afterFlush(function () {
-      console.log('QR', qrCode)
-      QRCode.toCanvas(template.$('#qr-canvas')[0], qrCode,  {
+      console.log('QR', qrCode);
+      template.qrCode.set(qrCode);
+      QRCode.toCanvas(template.$('#qr-canvas')[0], qrCode, {
         scale: 8,
         width: 200,
         margin: 2,
         errorCorrectionLevel: 'H',
         color: {
-          dark:"#000",
-          light:"#fff"
-        }
+          dark: '#000',
+          light: '#fff',
+        },
       }, function (error) {
-        if (error) console.error(error)
+        if (error) console.error(error);
       });
     });
   });
@@ -60,6 +62,10 @@ Template.dataQrCode.onCreated(function() {
 });
 
 Template.dataQrCode.helpers({
+  qrCode() {
+    const testingPrefix = Meteor.settings.public.qrClickPrefix || '';
+    return testingPrefix + Template.instance().qrCode.get();
+  },
   qrCodeChecksum() {
     return Template.instance().qrChecksum.get();
   },
@@ -71,5 +77,5 @@ Template.dataQrCode.helpers({
     return opReturn.map((op) => {
       return Buffer.from(op, 'hex').toString();
     }).join(`<br/>`);
-  }
+  },
 });

@@ -1,0 +1,32 @@
+<template name="authorize">
+    <div class="oauth-login">
+        {{#if validOAuthRequest}}
+            {{#unless loggingIn}}
+                {{#if currentUser}}
+                    {{#if Template.subscriptionsReady}}
+                        <form method="post" action="{{redirect_uri}}" role="form">
+                            <h2>Authorise oAuth login</h2>
+                            <input type="hidden" name="allow" value="yes">
+                            <input type="hidden" name="token" value="{{getToken}}">
+                            <input type="hidden" name="client_id" value="{{client_id}}">
+                            <input type="hidden" name="redirect_uri" value="{{redirect_uri}}">
+                            <input type="hidden" name="response_type" value="code">
+                            <button type="submit">Authorise</button>
+                        </form>
+                        <button class="logout">Logout</button>
+                    {{else}}
+                        loading...
+                    {{/if}}
+                {{else}}
+                    {{> login }}
+                {{/if}}
+            {{else}}
+                loading...
+            {{/unless}}
+        {{else}}
+            <div class="text-danger" style="background-color: #fff; padding: 25px; border-radius: 25px; opacity: 0.8; ">
+                ERROR: Invalid oAuth parameters
+            </div>
+        {{/if}}
+    </div>
+</template>

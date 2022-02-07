@@ -9,11 +9,14 @@
 </head>
 
 <body id="page-top">
-    {{> navbar}}
-    {{> main}}
 </body>
 
+<template name="layout">
+    {{> yield}}
+</template>
+
 <template name="main">
+    {{> navbar}}
     {{#if currentUser}}
         <header>
             <div class="header-content">
@@ -93,8 +96,10 @@
         <div class="checksum">
             {{qrCodeChecksum}}<br/>
         </div>
-        <div id="qr">
-            <canvas id="qr-canvas"></canvas>
-        </div>
+        <a href="{{qrCode}}" class="qr-login-link">
+            <div id="qr">
+                <canvas id="qr-canvas"></canvas>
+            </div>
+        </a>
     </div>
 </template>

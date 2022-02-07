@@ -22,9 +22,11 @@
                 {{/if}}
             </div>
         {{else}}
-            <div id="qr">
-                <canvas id="qr-canvas"></canvas>
-            </div>
+            <a href="{{qrCode}}" class="qr-login-link">
+                <div id="qr">
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+            </a>
         {{/with}}
     </div>
 </template>

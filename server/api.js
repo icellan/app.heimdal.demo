@@ -41,7 +41,7 @@ WebApp.connectHandlers.use('/api/v1/loginViaQr', Meteor.bindEnvironment((req, re
         message: 'OK'
       }));
     } catch(e) {
-      console.log(e);
+      console.error(e);
       res.writeHead(500, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
@@ -80,7 +80,7 @@ WebApp.connectHandlers.use('/api/v1/dataForQrLogin', Meteor.bindEnvironment((req
         data: savedSecret.data,
       }));
     } catch(e) {
-      console.log(e);
+      console.error(e);
       res.writeHead(500, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
@@ -104,7 +104,6 @@ WebApp.connectHandlers.use('/api/v1/signedData', Meteor.bindEnvironment((req, re
     res.end('');
   } else if (req.method === 'POST') {
     try {
-      console.log(req.body);
       const { challenge } = req.body;
       const savedSecret = Collections.connectionSecrets.findOne({secret: challenge})
       // we can only check here whether it actually exists
@@ -124,7 +123,7 @@ WebApp.connectHandlers.use('/api/v1/signedData', Meteor.bindEnvironment((req, re
         data: savedSecret.data,
       }));
     } catch(e) {
-      console.log(e);
+      console.error(e);
       res.writeHead(500, {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
